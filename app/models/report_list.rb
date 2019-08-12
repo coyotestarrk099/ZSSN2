@@ -1,0 +1,2 @@
+class ReportList < ApplicationRecord
+end
