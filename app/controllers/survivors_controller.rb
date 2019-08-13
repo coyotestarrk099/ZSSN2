@@ -15,7 +15,7 @@ class SurvivorsController < ApplicationController
     else
       render json: {
             success: false,
-            msg: "Warning!!! Warning!!! #{@survivor.name} is a ZUMBI!!!"
+            msg: "Server: Warning!!! Warning!!! #{@survivor.name} is a ZUMBI!!!"
           }.to_json, status: :unprocessable_entity
     end
   end
@@ -86,24 +86,24 @@ class SurvivorsController < ApplicationController
                     medication_amount: @friend.medication_amount + my_items['medication'] - friend_items['medication'])
           render json: {
             success: true,
-            msg: "troca realizada"
+            msg: "Server: Trade Completed!!"
           }.to_json, status: 200
         else
           render json: {
             success: false,
-            msg: "vocês não tem os items"
+            msg: "Server: Promises cannot enter the balance of trade. You need to have what you promise to give!!"
           }.to_json, status: :unprocessable_entity
         end
       else
         render json: {
             success: false,
-            msg: "vocês são zumbis"
+            msg: "Server: The only things the dead can exchange are whining."
           }.to_json, status: :unprocessable_entity
       end
     else
       render json: {
             success: false,
-            msg: "troca precisa ser equivalente"
+            msg: "Server: Nothing can be obtained without a kind of sacrifice. To obtain something one must offer something in return for equivalent value. This is the basic principle of alchemy, the Equivalent Exchange Law."
           }.to_json, status: :unprocessable_entity
     end
   end
