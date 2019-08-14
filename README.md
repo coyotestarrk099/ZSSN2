@@ -90,7 +90,6 @@ after,
 <dt></summary>
 <details>
 <summary>TradeBody***</summary>
-
 ```
     {
     "trade": {
