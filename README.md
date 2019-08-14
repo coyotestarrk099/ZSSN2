@@ -39,7 +39,7 @@ after,
 ### Survivor
 
 | Method  | URL         | Body  | Return             | Description                                    |
-| ------- | ----------- | ----------- | ---- | ------------------ | ---------------------------------------------- |
+| ------- | ----------- | ----  | ------------------ | ---------------------------------------------- |
 | **GET** | `/survivors` |              | Show all survivors | Endpoint that displays data from all survivors |
 | **GET** | `/survivors/:id` |           | Show survivor data | Endpoint that displays data from a survivor    |
 | **POST** | `/survivors` | SurvivorBody* | Created new survivors | Endpoint that displays data from the new added survivor |
@@ -116,7 +116,7 @@ after,
 ### ReportList
 
 | Method  | URL         | Body  | Return             | Description                                    |
-| ------- | ----------- | ----------- | ---- | ------------------ | ---------------------------------------------- |
+| ------- | ----------- | ----  | ------------------ | ---------------------------------------------- |
 | **GET** | `/report_lists` |             | Show all infection reports | Endpoint that displays data from all infection reports |
 | **POST** | `/report_lists` |  ReportBody*  | Create a infection report | Endpoint that displays data from a infection report    |
 
