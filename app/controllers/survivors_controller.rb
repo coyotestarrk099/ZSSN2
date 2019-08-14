@@ -15,7 +15,7 @@ class SurvivorsController < ApplicationController
     else
       render json: {
             success: false,
-            msg: "Server: Warning!!! Warning!!! #{@survivor.name} is a ZUMBI!!!"
+            msg: "Lori: Warning!!! Warning!!! #{@survivor.name} is a ZUMBI!!!"
           }.to_json, status: :unprocessable_entity
     end
   end
@@ -86,24 +86,24 @@ class SurvivorsController < ApplicationController
                     medication_amount: @friend.medication_amount + my_items['medication'] - friend_items['medication'])
           render json: {
             success: true,
-            msg: "Server: Trade Completed!!"
+            msg: "Lori: Trade Completed!!"
           }.to_json, status: 200
         else
           render json: {
             success: false,
-            msg: "Server: Promises cannot enter the balance of trade. You need to have what you promise to give!!"
+            msg: "Lori: Promises cannot enter the balance of trade. You need to have what you promise to give!!"
           }.to_json, status: :unprocessable_entity
         end
       else
         render json: {
             success: false,
-            msg: "Server: The only things the dead can exchange are whining."
+            msg: "Lori: The only things the dead can exchange are whining."
           }.to_json, status: :unprocessable_entity
       end
     else
       render json: {
             success: false,
-            msg: "Server: Nothing can be obtained without a kind of sacrifice. To obtain something one must offer something in return for equivalent value. This is the basic principle of alchemy, the Equivalent Exchange Law."
+            msg: "Lori: Nothing can be obtained without a kind of sacrifice. To obtain something one must offer something in return for equivalent value. This is the basic principle of alchemy, the Equivalent Exchange Law."
           }.to_json, status: :unprocessable_entity
     end
   end
@@ -114,7 +114,7 @@ class SurvivorsController < ApplicationController
     render json: {
             success: true,
             value: zombie,
-            msg: "Server: We have #{zombie}% ZOMBIES..."
+            msg: "Lori: We have #{zombie}% ZOMBIES..."
           }.to_json, status: 200
   end
 
@@ -124,7 +124,7 @@ class SurvivorsController < ApplicationController
     render json: {
             success: true,
             value: survivor,
-            msg: "Server: We have #{survivor}% survivors...Stay Strong!!!"
+            msg: "Lori: We have #{survivor}% survivors...Stay Strong!!!"
           }.to_json, status: 200
   end
 
@@ -142,7 +142,7 @@ class SurvivorsController < ApplicationController
               water: water.to_f,
               medication: medication.to_f
             },
-            msg: "Server: This is the country sittuation...
+            msg: "Lori: This is the country sittuation...
             Ammunition/Survivor: #{ammunition}
             Food/Survivor: #{food}
             Medication/Survivor: #{medication}
@@ -152,14 +152,14 @@ class SurvivorsController < ApplicationController
 
   def report_lost
     x = 0
-    lost = Survivor.where("infected >= 3")
-    lost.each do |cobaia|
-    x = x + (cobaia.ammunition_amount * 1 + cobaia.food_amount * 3 + cobaia.medication_amount * 2 + cobaia.water_amount * 4)
+    grimes = Survivor.where("infected >= 3")
+    grimes.each do |carl|
+    x = x + (carl.ammunition_amount * 1 + carl.food_amount * 3 + carl.medication_amount * 2 + carl.water_amount * 4)
     end
     render json: {
             success: true,
             value: x,
-            msg: "points #{x}" 
+            msg: "Lori: #{x} resource points lost for infection" 
           }.to_json, status: 200 
   end
 

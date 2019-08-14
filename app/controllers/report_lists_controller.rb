@@ -1,5 +1,5 @@
 class ReportListsController < ApplicationController
-  before_action :set_report_list, only: [:show, :update, :destroy]
+  before_action :set_report_list, only: [:show]
 
   # GET /report_lists
   def index
@@ -21,7 +21,7 @@ class ReportListsController < ApplicationController
       if ReportList.where("reportedId = ? and reporterId = ?", @report_list.reportedId, @report_list.reporterId).blank? == false
         render json: {
             success: false,
-            msg: "Server: Calm down!!! You already reported this user. Community thanks you for your effort."
+            msg: "Lori: Calm down!!! You already reported this user. Community thanks you for your effort."
           }.to_json, status: :unprocessable_entity         
       else
         if  Survivor.where("id = ? and infected < 3", @report_list.reporterId).count == 1
@@ -35,7 +35,7 @@ class ReportListsController < ApplicationController
         else
          render json: {
             success: false,
-            msg: "I don't know who you are. I don't know what you want. If you are looking for ransom I can tell you I don't have brains, but what I do have are a very particular set of skills. Skills I have acquired over a very long career. Skills that make me a nightmare for zombies like you. If you go out of my server now that'll be the end of it. I will not look for you, I will not pursue you, but if you don't, I will look for you, I will find you and I will kill you."
+            msg: "Lori: I don't know who you are. I don't know what you want. If you are looking for ransom I can tell you I don't have brains, but what I do have are a very particular set of skills. Skills I have acquired over a very long career. Skills that make me a nightmare for zombies like you. If you go out of my server now that'll be the end of it. I will not look for you, I will not pursue you, but if you don't, I will look for you, I will find you and I will kill you."
           }.to_json, status: :unprocessable_entity
         end
       end
@@ -47,20 +47,7 @@ class ReportListsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /report_lists/1
-  def update
-    if @report_list.update(report_list_params)
-      render json: @report_list
-    else
-      render json: @report_list.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /report_lists/1
-  def destroy
-    @report_list.destroy
-  end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_report_list
