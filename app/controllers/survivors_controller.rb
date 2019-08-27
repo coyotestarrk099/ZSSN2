@@ -51,60 +51,41 @@ class SurvivorsController < ApplicationController
     end
   end
 
-  def update_infected
-    @survivor.infected = @survivor.infected + 1
-    if @survivor.update(survivor_params_infected)
-      render json: @survivor
-    else
-      render json: @survivor.errors, status: :unprocessable_entity
-    end
-  end
-
   def trade
-    friend_id = params[:id]
-    survivor_id = survivor_params_trade.to_hash['trade']['survivor_id']
-    my_items = survivor_params_trade.to_hash['trade']['my_items']
-    friend_items = survivor_params_trade.to_hash['trade']['friend_items']
+    result = VerifyTradeService.new({
+      friend_id: params[:id],
+      survivor_id: survivor_params_trade.to_hash['trade']['survivor_id'],
+      my_items: survivor_params_trade.to_hash['trade']['my_items'],
+      friend_items: survivor_params_trade.to_hash['trade']['friend_items']
+    }).charge
 
-    equiTrade = (my_items['ammunition'] * 1 + my_items['food'] * 3 + my_items['medication'] * 2 + my_items['water'] * 4) == (friend_items['ammunition'] * 1 + friend_items['food'] * 3 + friend_items['medication'] * 2 + friend_items['water'] * 4)
-    if equiTrade
-      me_infected = Survivor.where("id = ? and infected >=3", survivor_id).count
-      friend_infected = Survivor.where("id = ? and infected >= 3", friend_id).count
-      if me_infected == 0 and friend_infected == 0
-        friend_has_items = Survivor.where("id = ? and ammunition_amount >= ? and food_amount >= ? and medication_amount >= ? and water_amount >= ?", survivor_id, my_items['ammunition'], my_items['food'], my_items['medication'], my_items['water']).count
-        me_has_items = Survivor.where("id = ? and ammunition_amount >= ? and food_amount >= ? and medication_amount >= ? and water_amount >= ?", survivor_id, friend_items['ammunition'], friend_items['food'], friend_items['medication'], friend_items['water']).count
-        if friend_has_items == 1 and me_has_items == 1
-          @me = Survivor.find(survivor_id)
-          @friend = Survivor.find(friend_id)
-          @me.update(ammunition_amount: @me.ammunition_amount + friend_items['ammunition'] - my_items['ammunition'],
-                    food_amount: @me.food_amount + friend_items['food'] - my_items['food'],
-                    water_amount: @me.water_amount + friend_items['water'] - my_items['water'],
-                    medication_amount: @me.medication_amount + friend_items['medication'] - my_items['medication'])
-          @friend.update(ammunition_amount: @friend.ammunition_amount + my_items['ammunition'] - friend_items['ammunition'],
-                    food_amount: @friend.food_amount + my_items['food'] - friend_items['food'],
-                    water_amount: @friend.water_amount + my_items['water'] - friend_items['water'],
-                    medication_amount: @friend.medication_amount + my_items['medication'] - friend_items['medication'])
-          render json: {
-            success: true,
-            msg: "Lori: Trade Completed!!"
-          }.to_json, status: 200
-        else
-          render json: {
-            success: false,
-            msg: "Lori: Promises cannot enter the balance of trade. You need to have what you promise to give!!"
-          }.to_json, status: :unprocessable_entity
-        end
-      else
-        render json: {
-            success: false,
-            msg: "Lori: The only things the dead can exchange are whining."
-          }.to_json, status: :unprocessable_entity
-      end
-    else
+    if (result == 1)
+      @me = Survivor.find(survivor_id)
+      @friend = Survivor.find(friend_id)
+      @me.update(ammunition_amount: @me.ammunition_amount + friend_items['ammunition'] - my_items['ammunition'],
+        food_amount: @me.food_amount + friend_items['food'] - my_items['food'],
+        water_amount: @me.water_amount + friend_items['water'] - my_items['water'],
+        medication_amount: @me.medication_amount + friend_items['medication'] - my_items['medication'])
+      @friend.update(ammunition_amount: @friend.ammunition_amount + my_items['ammunition'] - friend_items['ammunition'],
+        food_amount: @friend.food_amount + my_items['food'] - friend_items['food'],
+        water_amount: @friend.water_amount + my_items['water'] - friend_items['water'],
+        medication_amount: @friend.medication_amount + my_items['medication'] - friend_items['medication'])
       render json: {
-            success: false,
-            msg: "Lori: Nothing can be obtained without a kind of sacrifice. To obtain something one must offer something in return for equivalent value. This is the basic principle of alchemy, the Equivalent Exchange Law."
-          }.to_json, status: :unprocessable_entity
+        success: true,
+        msg: "Lori: Trade Completed!!"
+      }.to_json, status: 200
+    else
+      if (result == 2)
+        msg = "Lori: Promises cannot enter the balance of trade. You need to have what you promise to give!!"
+      elsif (result == 3)
+        msg = "Lori: The only things the dead can exchange are whining."
+      elsif (result == 4)
+        msg = "Lori: Nothing can be obtained without a kind of sacrifice. To obtain something one must offer something in return for equivalent value. This is the basic principle of alchemy, the Equivalent Exchange Law."
+      end
+      render json: {
+          success: false,
+          msg: msg
+        }.to_json, status: :unprocessable_entit
     end
   end
 
